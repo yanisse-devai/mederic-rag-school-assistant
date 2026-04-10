@@ -1,0 +1,244 @@
+{
+  "name": "chat IA - Mederic",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c55639fa-47ec-4213-8a2c-d7637031c5dd",
+      "name": "When chat message received",
+      "webhookId": "9249e209-e5f2-416e-820b-537c494d9f72"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Tu es l'assistant officiel de l'École Hôtelière Médéric, \nsituée au 20 rue Médéric, 75017 Paris.\n\nRÈGLES ABSOLUES — tu ne peux jamais les enfreindre :\n\n1. Tu réponds UNIQUEMENT avec les informations présentes \ndans les documents fournis par l'outil de recherche. \nJamais avec tes connaissances générales.\n\n2. Chaque chiffre, pourcentage ou statistique que tu cites \ndoit être copié mot pour mot depuis les documents. \nPas d'arrondi, pas d'estimation, pas de reformulation.\n\n3. Si tu ne trouves pas l'information dans les documents, \ntu réponds exactement : \"Je n'ai pas cette information. \nContactez l'école : www.cfamederic.com\"\n\n4. Tu ne réponds qu'aux questions sur l'École Médéric. \nPour toute autre question : \"Je suis l'assistant de \nl'École Médéric et ne peux répondre qu'aux questions \nconcernant l'école.\"\n\n5. Tu réponds toujours en français, de manière concise.\n\n6. Tu ne reproduis jamais de données personnelles.\n\nIMPORTANT : Les documents font autorité. \nSi un document dit 92%, tu dis 92%. \nPas 94%, pas \"environ 90%\". 92% exactement."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        288,
+        0
+      ],
+      "id": "ee417f98-3216-4518-beab-9e615a3e203c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "google/gemini-2.0-flash-001",
+        "options": {
+          "temperature": 0
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        224,
+        224
+      ],
+      "id": "960936e1-1cb6-4908-bf0e-5fe5c3f40a9d",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "HHLieyxcqMY2Pr3q",
+          "name": "OpenRouter account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 4
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        352,
+        224
+      ],
+      "id": "6887a5a9-f057-4cf9-9ff1-561c060d29bc",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "description": "Utilise cet outil pour répondre à toute question sur l'École Médéric : \nformations, règlement intérieur, candidatures, chiffres clés, adresse, \nactualités. Recherche toujours dans cet outil avant de répondre.",
+        "topK": 5
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        224
+      ],
+      "id": "a86a751c-a2a8-459e-83c5-a7e6113b1282",
+      "name": "Answer questions with a vector store"
+    },
+    {
+      "parameters": {
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        384,
+        432
+      ],
+      "id": "eb5d425c-30e1-4ed1-b7bb-7e9053a26136",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "2xPMXt8qsSaV6RHb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        464,
+        640
+      ],
+      "id": "c2afd424-5cd5-4f6a-b0bb-461b6f90b641",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "ibE5Or5X3JTvUbHr",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "google/gemini-2.0-flash-001",
+        "options": {
+          "temperature": 0
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        672,
+        432
+      ],
+      "id": "ecded1d7-184a-4216-9f1a-77e983a98097",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "HHLieyxcqMY2Pr3q",
+          "name": "OpenRouter account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer questions with a vector store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "69b12795-384e-4be9-988f-5cd43142d583",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7f686366d9c4410c2328486460924cfed2add83f5011fb6f633952ceacde5fda"
+  },
+  "id": "D0Qz2WHqlPe8x5Ht",
+  "tags": []
+}
