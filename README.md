@@ -152,6 +152,6 @@ Inscrit dans ma montée en compétences PM IA à l'École Hôtelière Médéric 
 ---
 
 ## 🤝 Contact
-Portfolio : [github.com/yanisse-kemel] | LinkedIn : [linkedin.com/in/yanisse-kemel] | ✉️ y.kemel@cfamederic.com
+Portfolio : [github.com/yanisse-devai] | LinkedIn : [linkedin.com/in/yanisse-kemel] | ✉️ yanissekemel@gmail.com
 
 *Projet interne — École Hôtelière Médéric · Paris 17ème*
